@@ -1,0 +1,3 @@
+SELECT t.sName ,h.MoneyAdd
+FROM Hy_List_Money h left join tHy t on h.sNo=t.sNo
+WHERE h.MoneyAdd >0 and h.MoneyAdd<300 and CONVERT(varchar(50), h.sDate, 120) LIKE '2015-06%'

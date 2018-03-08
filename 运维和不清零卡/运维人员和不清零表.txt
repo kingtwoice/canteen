@@ -1,0 +1,6 @@
+新建表 YunWei  
+字段 id   card   name
+
+
+新建表 NoClear 
+字段 id   card   name

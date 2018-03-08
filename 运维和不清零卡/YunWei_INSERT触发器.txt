@@ -1,0 +1,10 @@
+﻿CREATE TRIGGER [insert_YunWei] ON [dbo].[YunWei] 
+FOR INSERT
+AS BEGIN
+declare @cardid varchar(50),@ywname varchar(50);
+select @cardid = card,@ywname = name from inserted;
+
+ INSERT NoClear values(@cardid,@ywname);
+
+	
+END;

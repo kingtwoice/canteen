@@ -1,0 +1,9 @@
+CREATE   Procedure  CLEAR_CHINESEFOOD
+AS
+
+BEGIN
+
+DELETE FROM ChineseFood where id>0;
+
+END
+GO

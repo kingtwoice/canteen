@@ -1,0 +1,50 @@
+CREATE   Procedure  CZ
+
+ 
+AS
+  declare @i int,@sno varchar(20),@mp numeric(13) 
+
+
+declare @date datetime
+set @date = getdate()
+
+declare @czm  numeric(13) 
+set @czm = 300
+
+declare @czuser varchar(20)
+set @czuser = '01'
+ DECLARE @HYCZ TABLE
+(
+ sno varchar(20),
+ mp numeric(13),
+ flagID int
+)
+BEGIN
+
+ insert @HYCZ select sNo, RemainMoney,0 from tHy where sNo NOT IN (select card from YunWei)
+ 
+ SET @i = 1
+
+ WHILE(@i>0)
+  
+ BEGIN
+ 
+    SELECT TOP 1 @sno = sno,@mp = mp FROM @HYCZ WHERE flagID = 0
+  
+    SET @i=@@ROWCOUNT
+
+    IF @i<=0 
+	CONTINUE
+    
+    INSERT Hy_List_Money values(@sno,@mp,@czm,@mp+@czm,@date,@czuser,'³äÖµ',0,null,0)
+     
+    UPDATE tHy SET RemainMoney = RemainMoney +@czm ,CZMoney=CZMoney+@czm,CZTimes = CZTimes+1 where sNo = @sno
+
+    IF @@ERROR = 0
+    
+     UPDATE @HYCZ SET flagID = 1 WHERE sno = @sno
+    
+    END
+
+END
+GO

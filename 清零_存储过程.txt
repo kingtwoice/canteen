@@ -1,0 +1,38 @@
+CREATE   Procedure  QL
+
+AS
+ 
+BEGIN
+
+UPDATE tHy SET RemainMoney = 0 WHERE sNo NOT IN (select card from NoClear)
+
+END
+GO
+
+
+
+CREATE   Procedure  ALLQL
+
+AS
+ 
+BEGIN
+
+UPDATE tHy SET RemainMoney = 0 
+
+END
+GO
+
+
+
+CREATE   Procedure  CLEAR_USER_DATA
+
+AS
+ 
+BEGIN
+
+UPDATE tHy SET SalesMoney=0,SalesTimes=0,JFTotal=0,JFRemain=0,QCMoney=0,CZMoney=0,CZTimes=0,XFMoney=0,XFTimes=0,RemainMoney=0 
+
+END
+GO
+
+

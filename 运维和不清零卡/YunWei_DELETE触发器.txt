@@ -1,0 +1,9 @@
+﻿CREATE TRIGGER [del_YunWei] ON [dbo].[YunWei] 
+FOR DELETE
+AS BEGIN
+declare @cardid varchar(50),@ywname varchar(50);
+select @cardid = card,@ywname = name from deleted;
+
+ DELETE FROM NoClear WHERE card = @cardid and name = @ywname;
+
+END;

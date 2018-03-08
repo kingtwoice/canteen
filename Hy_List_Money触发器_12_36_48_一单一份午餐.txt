@@ -1,0 +1,30 @@
+﻿CREATE TRIGGER [insert_hy_list_money] ON [dbo].[Hy_List_Money] 
+FOR INSERT
+AS BEGIN
+declare @i int,@mp int;
+declare @cardid varchar(20),@moneyAdd  numeric(9),@sUser varchar(20);
+select @cardid=sNo,@moneyAdd = MoneyAdd,@sUser=sUser from inserted;
+declare @zcMoney  numeric(13) ;
+set @zcMoney = 12;
+declare @czuser varchar(20)
+set @czuser = 'st';
+
+declare @date datetime,@datetwo datetime;
+set @date = convert(varchar(20),getdate(), 23);
+set @datetwo = getdate();
+declare @consumetype int,@usecount int;
+select @consumetype=ConsumeType from ConsumeType where CardID=@cardid;
+SET @i=@@ROWCOUNT;
+if @i>0
+begin
+	delete from ConsumeType where CardID=@cardid;
+end
+select @usecount = count(*) from ChineseFood where CardID = @cardid and CDate = @date;
+while (@consumetype=1 and @usecount > 1 and @moneyAdd < 0 and @sUser='st')
+begin
+	 select @mp = RemainMoney from tHy where sNo = @cardid;
+	 UPDATE tHy SET RemainMoney = RemainMoney - @zcMoney ,SalesMoney = SalesMoney + @zcMoney,SalesTimes = SalesTimes + 1,JFTotal = JFTotal + @zcMoney,JFRemain = JFRemain + @zcMoney where sNo = @cardid;
+         INSERT Hy_List_Money values(@cardid,@mp,0-@zcMoney,@mp-@zcMoney,@datetwo,@czuser,'消费',0,null,0);
+	 set @usecount = @usecount -1;
+end
+END;

@@ -1,0 +1,1 @@
+UPDATE tHy set sAddress='xztv' where sNo IN (select card from NoClear where card not in(select card from YunWei))

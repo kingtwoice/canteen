@@ -1,0 +1,14 @@
+﻿CREATE TRIGGER [del_tHy] ON [dbo].[tHy] 
+FOR DELETE
+AS BEGIN
+declare @cardid varchar(50),@ywname varchar(50),@flag varchar(50);
+select @cardid = sNo,@ywname = sName,@flag = sAddress from deleted;
+ IF @flag='yw' OR @flag='YW' OR @flag='运维' OR @flag='运维人员'	
+ begin
+ 	DELETE from YunWei WHERE card=@cardid and name=@ywname;
+ end
+ELSE IF @flag='xztv' OR @flag='XZTV' OR @flag='XZDST_CHN'
+ begin
+  DELETE FROM NoClear WHERE card=@cardid and name = @ywname;	
+ end
+END;

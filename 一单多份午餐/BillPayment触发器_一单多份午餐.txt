@@ -1,0 +1,22 @@
+﻿CREATE TRIGGER [insert_billpayment] ON [dbo].[BillPayment] 
+FOR INSERT
+AS BEGIN
+declare @billid varchar(20),@i int,@copy int;
+select @billid = BillID from inserted;
+declare @cardid varchar(50);
+declare @date datetime;
+
+select @cardid = bl.MemberID,@date=bl.BillDate  from BillItem bi left join BillPayment bp on bi.BillID=bp.BillID left join Bill bl on bi.BillID = bl.BillID where bi.MenuName='中餐' and bi.BillID = @billid and bp.SubjectID='003' and bl.ChargePersonID='st';
+SET @i=@@ROWCOUNT
+if @i>0
+begin
+	select @copy=count(*) from BillItem where BillID = @billid and MenuName='中餐';
+	INSERT ChineseFood values(@billid,@cardid,@date);
+	INSERT ConsumeType values(1,@cardid,@copy);	
+end
+else
+begin
+	select @cardid = MemberID from Bill where BillID = @billid;
+	INSERT ConsumeType values(0,@cardid,0);
+end	
+END;
